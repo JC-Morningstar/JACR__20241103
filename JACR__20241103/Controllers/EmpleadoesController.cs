@@ -29,13 +29,15 @@ namespace JACR__20241103.Controllers
         // GET: Empleadoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Empleados == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
             var empleado = await _context.Empleados
+                .Include(e => e.ReferenciasPersonales)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (empleado == null)
             {
                 return NotFound();
@@ -158,5 +160,6 @@ namespace JACR__20241103.Controllers
         {
           return (_context.Empleados?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+
     }
 }

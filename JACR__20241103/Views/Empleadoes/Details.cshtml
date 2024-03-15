@@ -41,8 +41,54 @@
             @Html.DisplayFor(model => model.Salario)
         </dd>
     </dl>
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>
+   
+
+
+
+<h3>Referencias Personales</h3>
+@if (Model.ReferenciasPersonales != null && Model.ReferenciasPersonales.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var referencia in Model.ReferenciasPersonales)
+            {
+                <tr>
+                    <td>@referencia.Nombre</td>
+                    <td>@referencia.Apellido</td>
+                    <td>@referencia.Telefono</td>
+                    <td>
+                        <a asp-controller="ReferenciasPersonales" asp-action="Edit" asp-route-id="@referencia.Id">Editar</a> |
+                        <a asp-controller="ReferenciasPersonales" asp-action="Delete" asp-route-id="@referencia.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay referencias personales registradas para este empleado.</p>
+}
+
+<p>
+    <a asp-controller="ReferenciasPersonales" asp-action="Create" asp-route-empleadoId="@Model.Id">Agregar Referencia Personal</a>
+</p>
+
+<p>
+    <a asp-action="Index">Volver a la lista</a>
+</p>
+
 </div>

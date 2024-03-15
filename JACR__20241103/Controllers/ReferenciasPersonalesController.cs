@@ -8,160 +8,120 @@ using Microsoft.EntityFrameworkCore;
 using JACR__20241103.Models;
 
 namespace JACR__20241103.Controllers
-{
-    public class ReferenciasPersonalesController : Controller
+
     {
-        private readonly JCT20241103Context _context;
-
-        public ReferenciasPersonalesController(JCT20241103Context context)
+        public class ReferenciasPersonalesController : Controller
         {
-            _context = context;
-        }
+            private readonly JCT20241103Context _context;
 
-        // GET: ReferenciasPersonales
-        public async Task<IActionResult> Index()
-        {
-            var jCT20241103Context = _context.ReferenciasPersonales.Include(r => r.Empleado);
-            return View(await jCT20241103Context.ToListAsync());
-        }
-
-        // GET: ReferenciasPersonales/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.ReferenciasPersonales == null)
+            public ReferenciasPersonalesController(JCT20241103Context context)
             {
-                return NotFound();
+                _context = context;
             }
-
-            var referenciasPersonale = await _context.ReferenciasPersonales
-                .Include(r => r.Empleado)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (referenciasPersonale == null)
-            {
-                return NotFound();
-            }
-
-            return View(referenciasPersonale);
-        }
-
         // GET: ReferenciasPersonales/Create
-        public IActionResult Create()
+        public IActionResult Create(int empleadoId)
         {
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Id");
+            ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Nombre", empleadoId);
             return View();
         }
 
+
+
         // POST: ReferenciasPersonales/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,EmpleadoId,Nombre,Apellido,Telefono")] ReferenciasPersonale referenciasPersonale)
-        {
-            if (ModelState.IsValid)
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Create([Bind("Id,EmpleadoId,Nombre,Apellido,Telefono")] ReferenciasPersonale referenciaPersonal)
             {
-                _context.Add(referenciasPersonale);
+                if (ModelState.IsValid)
+                {
+                    _context.Add(referenciaPersonal);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", "Empleados", new { id = referenciaPersonal.EmpleadoId });
+                }
+                return View(referenciaPersonal);
+            }
+
+            // GET: ReferenciasPersonales/Edit/5
+            public async Task<IActionResult> Edit(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var referenciaPersonal = await _context.ReferenciasPersonales.FindAsync(id);
+                if (referenciaPersonal == null)
+                {
+                    return NotFound();
+                }
+                return View(referenciaPersonal);
+            }
+
+            // POST: ReferenciasPersonales/Edit/5
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, [Bind("Id,EmpleadoId,Nombre,Apellido,Telefono")] ReferenciasPersonale referenciaPersonal)
+            {
+                if (id != referenciaPersonal.Id)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(referenciaPersonal);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!ReferenciaPersonalExists(referenciaPersonal.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction("Details", "Empleados", new { id = referenciaPersonal.EmpleadoId });
+                }
+                return View(referenciaPersonal);
+            }
+
+            // GET: ReferenciasPersonales/Delete/5
+            public async Task<IActionResult> Delete(int? id)
+            {
+                if (id == null)
+                {
+                    return NotFound();
+                }
+
+                var referenciaPersonal = await _context.ReferenciasPersonales
+                    .FirstOrDefaultAsync(m => m.Id == id);
+                if (referenciaPersonal == null)
+                {
+                    return NotFound();
+                }
+
+                return View(referenciaPersonal);
+            }
+
+            // POST: ReferenciasPersonales/Delete/5
+            [HttpPost, ActionName("Delete")]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> DeleteConfirmed(int id)
+            {
+                var referenciaPersonal = await _context.ReferenciasPersonales.FindAsync(id);
+                _context.ReferenciasPersonales.Remove(referenciaPersonal);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Id", referenciasPersonale.EmpleadoId);
-            return View(referenciasPersonale);
-        }
 
-        // GET: ReferenciasPersonales/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.ReferenciasPersonales == null)
+            private bool ReferenciaPersonalExists(int id)
             {
-                return NotFound();
+                return _context.ReferenciasPersonales.Any(e => e.Id == id);
             }
-
-            var referenciasPersonale = await _context.ReferenciasPersonales.FindAsync(id);
-            if (referenciasPersonale == null)
-            {
-                return NotFound();
-            }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Id", referenciasPersonale.EmpleadoId);
-            return View(referenciasPersonale);
-        }
-
-        // POST: ReferenciasPersonales/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EmpleadoId,Nombre,Apellido,Telefono")] ReferenciasPersonale referenciasPersonale)
-        {
-            if (id != referenciasPersonale.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(referenciasPersonale);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReferenciasPersonaleExists(referenciasPersonale.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["EmpleadoId"] = new SelectList(_context.Empleados, "Id", "Id", referenciasPersonale.EmpleadoId);
-            return View(referenciasPersonale);
-        }
-
-        // GET: ReferenciasPersonales/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.ReferenciasPersonales == null)
-            {
-                return NotFound();
-            }
-
-            var referenciasPersonale = await _context.ReferenciasPersonales
-                .Include(r => r.Empleado)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (referenciasPersonale == null)
-            {
-                return NotFound();
-            }
-
-            return View(referenciasPersonale);
-        }
-
-        // POST: ReferenciasPersonales/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.ReferenciasPersonales == null)
-            {
-                return Problem("Entity set 'JCT20241103Context.ReferenciasPersonales'  is null.");
-            }
-            var referenciasPersonale = await _context.ReferenciasPersonales.FindAsync(id);
-            if (referenciasPersonale != null)
-            {
-                _context.ReferenciasPersonales.Remove(referenciasPersonale);
-            }
-            
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool ReferenciasPersonaleExists(int id)
-        {
-          return (_context.ReferenciasPersonales?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
-}
