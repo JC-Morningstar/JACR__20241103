@@ -1,5 +1,6 @@
 ﻿using JACR__20241103.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace JACR__20241103.Controllers
