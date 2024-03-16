@@ -1,62 +1,72 @@
 ﻿@model JACR__20241103.Models.Empleado
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Details";
 }
-<style>
-    body {
-        background-color: lightblue;
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-</style>
-<h1>Editar Empleado</h1>
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" class="needs-validation" novalidate>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label">Nombre</label>
-                <input asp-for="Nombre" class="form-control" required />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-                <div class="invalid-feedback">Por favor, introduce un nombre.</div>
+<div class="container">
+    <h1 class="mt-4">Detalles del Empleado</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Empleado</h4>
+                    <hr />
+                    <dl class="row">
+                        <dt class="col-sm-4">Nombre</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Nombre)</dd>
+                        <dt class="col-sm-4">Apellido</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Apellido)</dd>
+                        <dt class="col-sm-4">Edad</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Edad)</dd>
+                        <dt class="col-sm-4">Departamento</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Departamento)</dd>
+                        <dt class="col-sm-4">Salario</dt>
+                        <dd class="col-sm-8">@Html.DisplayFor(model => model.Salario)</dd>
+                    </dl>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label">Apellido</label>
-                <input asp-for="Apellido" class="form-control" required />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
-                <div class="invalid-feedback">Por favor, introduce un apellido.</div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Edad" class="control-label">Edad</label>
-                <input asp-for="Edad" class="form-control" required />
-                <span asp-validation-for="Edad" class="text-danger"></span>
-                <div class="invalid-feedback">Por favor, introduce una edad válida.</div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Departamento" class="control-label">Departamento</label>
-                <input asp-for="Departamento" class="form-control" required />
-                <span asp-validation-for="Departamento" class="text-danger"></span>
-                <div class="invalid-feedback">Por favor, introduce un departamento.</div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Salario" class="control-label">Salario</label>
-                <input asp-for="Salario" class="form-control" required />
-                <span asp-validation-for="Salario" class="text-danger"></span>
-                <div class="invalid-feedback">Por favor, introduce un salario válido.</div>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-                <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-            </div>
-        </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3>Referencias Personales</h3>
+        @if (Model.ReferenciasPersonales != null && Model.ReferenciasPersonales.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Teléfono</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var referencia in Model.ReferenciasPersonales)
+                    {
+                        <tr>
+                            <td>@referencia.Nombre</td>
+                            <td>@referencia.Apellido</td>
+                            <td>@referencia.Telefono</td>
+                            <td>
+                                <a asp-controller="ReferenciasPersonales" asp-action="Edit" asp-route-id="@referencia.Id" class="btn btn-sm btn-primary">Editar</a>
+                                <a asp-controller="ReferenciasPersonales" asp-action="Delete" asp-route-id="@referencia.Id" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No hay referencias personales registradas para este empleado.</p>
+        }
+    </div>
+
+    <div class="mt-4">
+        <a asp-controller="ReferenciasPersonales" asp-action="Create" asp-route-empleadoId="@Model.Id" class="btn btn-primary">Agregar Referencia Personal</a>
+        <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
