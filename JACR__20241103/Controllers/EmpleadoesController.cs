@@ -49,8 +49,10 @@ namespace JACR__20241103.Controllers
         // GET: Empleadoes/Create
         public IActionResult Create()
         {
-            return View();
+            var empleado = new Empleado(); // o cualquier lógica para crear un nuevo empleado
+            return View(empleado);
         }
+
 
         // POST: Empleadoes/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.

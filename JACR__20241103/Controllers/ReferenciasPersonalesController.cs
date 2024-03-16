@@ -36,7 +36,7 @@ namespace JACR__20241103.Controllers
                 {
                     _context.Add(referenciaPersonal);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", "Empleados", new { id = referenciaPersonal.EmpleadoId });
+                    return RedirectToAction("Details", "Empleadoes", new { id = referenciaPersonal.EmpleadoId });
                 }
                 return View(referenciaPersonal);
             }
