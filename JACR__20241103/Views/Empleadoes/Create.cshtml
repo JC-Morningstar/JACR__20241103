@@ -3,57 +3,77 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    body {
+        background-color: lightblue;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+</style>
+<div class="container">
+    <h1 class="mt-4">Crear Empleado</h1>
 
-<h1>Create</h1>
-
-<h4>Empleado</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <div class="mt-4">
+        <h4>Datos del Empleado</h4>
+        <hr />
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
+            <div class="form-group row">
+                <label for="Nombre" class="col-sm-2 col-form-label">Nombre:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
-                <input asp-for="Apellido" class="form-control" />
-                <span asp-validation-for="Apellido" class="text-danger"></span>
+            <div class="form-group row">
+                <label for="Apellido" class="col-sm-2 col-form-label">Apellido:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Edad" class="control-label"></label>
-                <input asp-for="Edad" class="form-control" />
-                <span asp-validation-for="Edad" class="text-danger"></span>
+            <div class="form-group row">
+                <label for="Edad" class="col-sm-2 col-form-label">Edad:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Edad" class="form-control" />
+                    <span asp-validation-for="Edad" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Departamento" class="control-label"></label>
-                <input asp-for="Departamento" class="form-control" />
-                <span asp-validation-for="Departamento" class="text-danger"></span>
+            <div class="form-group row">
+                <label for="Departamento" class="col-sm-2 col-form-label">Departamento:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Departamento" class="form-control" />
+                    <span asp-validation-for="Departamento" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Salario" class="control-label"></label>
-                <input asp-for="Salario" class="form-control" />
-                <span asp-validation-for="Salario" class="text-danger"></span>
+            <div class="form-group row">
+                <label for="Salario" class="col-sm-2 col-form-label">Salario:</label>
+                <div class="col-sm-10">
+                    <input asp-for="Salario" class="form-control" />
+                    <span asp-validation-for="Salario" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
 
-            </div>
-            <div class="form-group">
+    <div class="mt-4">
+        <div class="form-group row">
+            <div class="col-sm-10 offset-sm-2">
+                <a asp-action="Index" class="btn btn-secondary">Volver a la lista</a>
                 <a asp-action="Create" asp-controller="ReferenciasPersonales" asp-route-empleadoId="@Model.Id" class="btn btn-success">Agregar Referencia Personal</a>
             </div>
-
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
